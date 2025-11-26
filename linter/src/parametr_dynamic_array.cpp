@@ -12,9 +12,6 @@
 
 using namespace SURELOG;
 
-// ----------------------
-// Получаем имя параметра
-// ----------------------
 std::string findParamName(const FileContent* fC, NodeId paramDeclId) {
     // List_of_param_assignments
     auto listNodes = fC->sl_collect_all(paramDeclId, VObjectType::paList_of_param_assignments);
@@ -93,7 +90,7 @@ int main(int argc, const char** argv) {
                     std::string fileName = std::string(FileSystem::getInstance()->toPath(fileId));
                     uint32_t line = fC->Line(errNode);
 
-                    // --- Выводим сообщение о нарушении правила ---
+                    // Выводим сообщение о нарушении правила
                     std::cerr << "Error PARAMETER_DYNAMIC_ARRAY: parameter '"
                               << paramName
                               << "' uses unsized (dynamic) unpacked array dimension at "

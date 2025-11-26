@@ -94,7 +94,7 @@ int main(int argc, const char** argv) {
 
         for (NodeId dataDecl : dataDecls) {
 
-            // Проверяем — есть ли Packed_dimension перед типом
+            // Проверяем есть ли Packed_dimension перед типом
             auto packedDims = fC->sl_collect_all(dataDecl, VObjectType::paPacked_dimension);
             if (packedDims.empty()) continue;
 
@@ -102,7 +102,7 @@ int main(int argc, const char** argv) {
             if (hasExplicitType(fC, dataDecl))
                 continue; // тип есть → нарушения нет
 
-            // Теперь это точно IMPLICIT_DATA_TYPE_IN_DECLARATION
+            // Теперь IMPLICIT_DATA_TYPE_IN_DECLARATION
             std::string varName = findVarName(fC, dataDecl);
 
             NodeId where = packedDims.front();  
