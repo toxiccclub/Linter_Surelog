@@ -14,7 +14,7 @@ using namespace SURELOG;
 
 namespace Analyzer {
 
-// --- Получение имени функции из Function_data_type_or_implicit ---
+// Получение имени функции из Function_data_type_or_implicit
 std::string getFunctionName(const FileContent* fC, NodeId typeNode) {
     for (NodeId node = typeNode; node; node = fC->Sibling(node)) {
         if (fC->Type(node) == VObjectType::slStringConst) {
@@ -24,7 +24,7 @@ std::string getFunctionName(const FileContent* fC, NodeId typeNode) {
     return "<unknown>";
 }
 
-// --- Проверка наличия return type ---
+// Проверка наличия return type
 bool hasReturnType(const FileContent* fC, NodeId typeNode) {
     for (NodeId child = fC->Child(typeNode); child; child = fC->Sibling(child)) {
         if (fC->Type(child) == VObjectType::paFunction_data_type) {
@@ -34,7 +34,7 @@ bool hasReturnType(const FileContent* fC, NodeId typeNode) {
     return false;
 }
 
-// --- Проверка одного Function_prototype ---
+// Проверка одного Function_prototype
 void checkFunctionPrototype(const FileContent* fC, NodeId protoId) {
     auto ftypeNodes = fC->sl_collect_all(protoId, VObjectType::paFunction_data_type_or_implicit, false);
     if (ftypeNodes.empty()) return;

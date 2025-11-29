@@ -31,9 +31,6 @@ std::string findParamName(const FileContent* fC, NodeId paramDeclId) {
     return "<unknown>";
 }
 
-// -------------------------
-// Основная проверка правила
-// -------------------------
 void checkParameterDynamicArray(const FileContent* fC) {
 
         NodeId root = fC->getRootNode();

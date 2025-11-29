@@ -8,7 +8,7 @@
 #include "Surelog/CommandLine/CommandLineParser.h"
 #include "Surelog/ErrorReporting/ErrorContainer.h"
 #include "Surelog/SourceCompile/SymbolTable.h"
-#include "Surelog/linter/fatal_rule.h"
+#include "fatal_rule.h"
 
 // UHDM
 #include <uhdm/VpiListener.h>

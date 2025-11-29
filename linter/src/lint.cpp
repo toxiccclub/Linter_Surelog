@@ -1,7 +1,7 @@
 #include <iostream>
 #include "Surelog/API/Surelog.h"
 #include "Surelog/CommandLine/CommandLineParser.h"
-#include "Surelog/linter/rule_distpatcher.h"
+#include "rule_distpatcher.h"
 
 using namespace SURELOG;
 

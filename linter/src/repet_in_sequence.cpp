@@ -31,7 +31,7 @@ std::string findSequenceName(const FileContent* fC, NodeId seqDeclId) {
     return "<unknown>";
 }
 
-// Основная проверка: внутри одной Sequence_expr не должно быть одновременно
+// внутри одной Sequence_expr не должно быть одновременно
 // paGoto_repetition и paNon_consecutive_repetition
 void checkRepetitionInSequence(const FileContent* fC) {
     if (!fC) return;
