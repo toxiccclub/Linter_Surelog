@@ -36,7 +36,8 @@ bool hasReturnType(const FileContent* fC, NodeId typeNode) {
 }
 
 // Проверка одного Function_prototype
-void checkFunctionPrototype(const FileContent* fC, NodeId protoId) {
+void checkFunctionPrototype(const FileContent* fC, NodeId protoId,
+                            ErrorContainer* errors, SymbolTable* symbols) {
   auto ftypeNodes = fC->sl_collect_all(
       protoId, VObjectType::paFunction_data_type_or_implicit, false);
   if (ftypeNodes.empty()) return;
@@ -45,17 +46,26 @@ void checkFunctionPrototype(const FileContent* fC, NodeId protoId) {
 
   if (!hasReturnType(fC, typeNode)) {
     std::string funcName = getFunctionName(fC, typeNode);
+    auto fileId = fC->getFileId(typeNode);
     uint32_t line = fC->Line(typeNode);
-    std::string fileName =
-        std::string(FileSystem::getInstance()->toPath(fC->getFileId(typeNode)));
+    uint32_t column = 0;
+    try {
+      column = fC->Column(typeNode);
+    } catch (...) {
+      column = 0;
+    }
 
-    std::cerr << "Error PROTOTYPE_RETURN_DATA_TYPE: Function prototype '"
-              << funcName << "' missing return data type at " << fileName << ":"
-              << line << std::endl;
+    SymbolId obj = symbols->registerSymbol(funcName);
+
+    Location loc(fileId, line, column, obj);
+    Error err(ErrorDefinition::PROTOTYPE_RETURN_DATA_TYPE, loc);
+
+    errors->addError(err, false);
   }
 }
 
-void checkPrototypeReturnDataType(const FileContent* fC) {
+void checkPrototypeReturnDataType(const FileContent* fC, ErrorContainer* errors,
+                                  SymbolTable* symbols, ) {
   NodeId root = fC->getRootNode();
 
   // 1. Классы
@@ -66,7 +76,7 @@ void checkPrototypeReturnDataType(const FileContent* fC) {
       auto protoNodes =
           fC->sl_collect_all(m, VObjectType::paFunction_prototype, false);
       for (NodeId protoId : protoNodes) {
-        checkFunctionPrototype(fC, protoId);
+        checkFunctionPrototype(fC, protoId, errors, symbols);
       }
     }
   }
@@ -84,7 +94,7 @@ void checkPrototypeReturnDataType(const FileContent* fC) {
         auto protoNodes =
             fC->sl_collect_all(extId, VObjectType::paFunction_prototype, false);
         for (NodeId protoId : protoNodes) {
-          checkFunctionPrototype(fC, protoId);
+          checkFunctionPrototype(fC, protoId, errors, symbols);
         }
       }
     }
