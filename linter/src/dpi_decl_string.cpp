@@ -22,7 +22,7 @@ static std::string trim(const std::string& s) {
   return s.substr(start, end - start + 1);
 }
 
-void checkDpiDeclarationString(const FileContent* fC) {
+void checkDpiDeclarationString(const FileContent* fC, ErrorContainer* errors, SymbolTable* symbols) {
   NodeId root = fC->getRootNode();
 
   // DPI-import/export
@@ -50,14 +50,22 @@ void checkDpiDeclarationString(const FileContent* fC) {
     // Проверка значения
     if (dpiStr != "DPI-C" && dpiStr != "DPI") {
       auto fileId = fC->getFileId(stringNode);
-      std::string fileName =
-          std::string(FileSystem::getInstance()->toPath(fileId));
       uint32_t line = fC->Line(stringNode);
+      uint32_t column = 0;
 
-      std::cerr << "[SNT:DPI_DECLARATION_STRING] " << fileName << ":" << line
-                << " - expecting \"DPI-C\" instead of \"" << dpiStr << "\""
-                << std::endl;
+      try {
+        column = fC->Column(stringNode);
+      } catch (...) {
+        column = 0;
+      }
+
+      SymbolId obj = symbols->registerSymbol(dpiStr);
+
+
+      Location loc(fileId, line, column, obj);
+      Error err(ErrorDefinition::LINT_DPI_DECLARATION_STRING, loc);
+      errors->addError(err, false);
     }
   }
 }
-}  // namespace Analyzer
+}

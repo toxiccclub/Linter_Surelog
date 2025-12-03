@@ -6,6 +6,6 @@ using namespace SURELOG;
 
 namespace Analyzer {
 
-void checkDpiDeclarationString(const FileContent* fC);
+void checkDpiDeclarationString(const FileContent* fC, ErrorContainer* errors, SymbolTable* symbols);
 
 }

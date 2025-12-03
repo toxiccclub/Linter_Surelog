@@ -20,7 +20,7 @@ void runAllRules(const FileContent* fC, ErrorContainer* errors, SymbolTable* sym
   Analyzer::checkParameterDynamicArray(fC);
   Analyzer::checkImplicitDataTypeInDeclaration(fC);
   Analyzer::checkHierarchicalInterfaceIdentifier(fC);
-  Analyzer::checkDpiDeclarationString(fC);
+  Analyzer::checkDpiDeclarationString(fC, errors, symbols);
   Analyzer::checkClassVariableLifetime(fC, errors, symbols);
 }
 
