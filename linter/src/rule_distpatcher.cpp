@@ -19,7 +19,7 @@ void runAllRules(const FileContent* fC, ErrorContainer* errors,
   Analyzer::checkRepetitionInSequence(fC);
   Analyzer::checkPrototypeReturnDataType(fC);
   Analyzer::checkParameterDynamicArray(fC);
-  Analyzer::checkImplicitDataTypeInDeclaration(fC);
+  Analyzer::checkImplicitDataTypeInDeclaration(fC, errors, symbols);
   Analyzer::checkHierarchicalInterfaceIdentifier(fC, errors, symbols);
   Analyzer::checkDpiDeclarationString(fC, errors, symbols);
   Analyzer::checkClassVariableLifetime(fC, errors, symbols);

@@ -45,7 +45,9 @@ bool hasExplicitType(const FileContent* fC, NodeId dataDecl) {
   return false;
 }
 
-void checkImplicitDataTypeInDeclaration(const FileContent* fC) {
+void checkImplicitDataTypeInDeclaration(const FileContent* fC,
+                                        ErrorContainer* errors,
+                                        SymbolTable* symbols) {
   NodeId root = fC->getRootNode();
 
   // Ищем Data_declaration
@@ -62,13 +64,22 @@ void checkImplicitDataTypeInDeclaration(const FileContent* fC) {
     std::string varName = findVarName(fC, dataDecl);
 
     NodeId where = packedDims.front();
-    std::string fileName =
-        std::string(FileSystem::getInstance()->toPath(fC->getFileId(where)));
+    auto fileId = fC->getFileId(where);
     uint32_t line = fC->Line(where);
+    uint32_t column = 0;
+    try {
+      column = fC->Column(where);
+    } catch (...) {
+      column = 0;
+    }
 
-    std::cerr << "Error IMPLICIT_DATA_TYPE_IN_DECLARATION: variable '"
-              << varName << "' declared without explicit type at " << fileName
-              << ":" << line << std::endl;
+    SymbolId obj = symbols->registerSymbol(varName);
+
+    Location loc(fileId, line, column, obj);
+
+    Error err(ErrorDefinition::IMPLICIT_DATA_TYPE_IN_DECLARATION, loc);
+
+    errors->addError(err, false);
   }
 }
 }  // namespace Analyzer
