@@ -19,6 +19,7 @@ int main(int argc, const char** argv) {
   clp->setCacheAllowed(false);
   clp->setFilterInfo();
   clp->setFilterNote();
+  clp->setFilterWarning();
 
   bool success = clp->parseCommandLine(argc, argv);
   Design* the_design = nullptr;

@@ -38,7 +38,9 @@ static std::string joinNames(const FileContent* fC,
   return res;
 }
 
-void checkHierarchicalInterfaceIdentifier(const FileContent* fC) {
+void checkHierarchicalInterfaceIdentifier(const FileContent* fC,
+                                          ErrorContainer* errors,
+                                          SymbolTable* symbols) {
   NodeId root = fC->getRootNode();
 
   // Ищем interface_identifier
@@ -47,19 +49,26 @@ void checkHierarchicalInterfaceIdentifier(const FileContent* fC) {
   for (NodeId iid : iidNodes) {
     auto parts = collectStringConsts(fC, iid);
 
-    // Если частей > 1 — это иерархическое имя → нарушение
+    // Если частей >= 1 — это иерархическое имя → нарушение
     if (parts.size() >= 1) {
-      auto fileId = fC->getFileId(iid);
-      uint32_t line = fC->Line(iid);
-      std::string fileName =
-          std::string(FileSystem::getInstance()->toPath(fileId));
-
       std::string fullName = joinNames(fC, parts);
 
-      std::cerr << "Error HIERARCHICAL_INTERFACE_IDENTIFIER: hierarchical "
-                   "interface identifier '"
-                << fullName << "' not allowed at " << fileName << ":" << line
-                << std::endl;
+      auto fileId = fC->getFileId(iid);
+      uint32_t line = fC->Line(iid);
+      uint32_t column = 0;
+      try {
+        column = fC->Column(iid);
+      } catch (...) {
+        column = 0;
+      }
+
+      SymbolId obj = symbols->registerSymbol(fullName);
+
+      Location loc(fileId, line, column, obj);
+
+      Error err(ErrorDefinition::LINT_HIERARCHICAL_INTERFACE_IDENTIFIER, loc);
+
+      errors->addError(err, false);
     }
   }
 }

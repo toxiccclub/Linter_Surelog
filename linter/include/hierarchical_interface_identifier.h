@@ -16,6 +16,8 @@ static std::vector<NodeId> collectStringConsts(const FileContent* fC,
 static std::string joinNames(const FileContent* fC,
                              const std::vector<NodeId>& parts);
 
-void checkHierarchicalInterfaceIdentifier(const FileContent* fC);
+void checkHierarchicalInterfaceIdentifier(const FileContent* fC,
+                                          ErrorContainer* errors,
+                                          SymbolTable* symbols);
 
 }  // namespace Analyzer

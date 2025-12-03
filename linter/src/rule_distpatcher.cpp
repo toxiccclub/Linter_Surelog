@@ -14,17 +14,19 @@
 
 using namespace SURELOG;
 
-void runAllRules(const FileContent* fC, ErrorContainer* errors, SymbolTable* symbols) {
+void runAllRules(const FileContent* fC, ErrorContainer* errors,
+                 SymbolTable* symbols) {
   Analyzer::checkRepetitionInSequence(fC);
   Analyzer::checkPrototypeReturnDataType(fC);
   Analyzer::checkParameterDynamicArray(fC);
   Analyzer::checkImplicitDataTypeInDeclaration(fC);
-  Analyzer::checkHierarchicalInterfaceIdentifier(fC);
+  Analyzer::checkHierarchicalInterfaceIdentifier(fC, errors, symbols);
   Analyzer::checkDpiDeclarationString(fC, errors, symbols);
   Analyzer::checkClassVariableLifetime(fC, errors, symbols);
 }
 
-void runAllRulesOnDesign(Design* design, const vpiHandle& UHDMdesign, ErrorContainer* errors, SymbolTable* symbols) {
+void runAllRulesOnDesign(Design* design, const vpiHandle& UHDMdesign,
+                         ErrorContainer* errors, SymbolTable* symbols) {
   if (!design) return;
 
   for (auto& it : design->getAllFileContents()) {
