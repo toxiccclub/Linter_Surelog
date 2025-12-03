@@ -16,7 +16,7 @@ using namespace SURELOG;
 
 void runAllRules(const FileContent* fC, ErrorContainer* errors,
                  SymbolTable* symbols) {
-  Analyzer::checkRepetitionInSequence(fC);
+  Analyzer::checkRepetitionInSequence(fC, errors, symbols);
   Analyzer::checkPrototypeReturnDataType(fC, errors, symbols);
   Analyzer::checkParameterDynamicArray(fC, errors, symbols);
   Analyzer::checkImplicitDataTypeInDeclaration(fC, errors, symbols);

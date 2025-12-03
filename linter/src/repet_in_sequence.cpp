@@ -34,7 +34,8 @@ std::string findSequenceName(const FileContent* fC, NodeId seqDeclId) {
 
 // внутри одной Sequence_expr не должно быть одновременно
 // paGoto_repetition и paNon_consecutive_repetition
-void checkRepetitionInSequence(const FileContent* fC) {
+void checkRepetitionInSequence(const FileContent* fC, ErrorContainer* errors,
+                               SymbolTable* symbols) {
   if (!fC) return;
 
   NodeId root = fC->getRootNode();
@@ -62,14 +63,20 @@ void checkRepetitionInSequence(const FileContent* fC) {
 
       if (hasGoto && hasNonConsec) {
         auto fileId = fC->getFileId(seqExprId);
-        std::string fileName =
-            std::string(FileSystem::getInstance()->toPath(fileId));
         uint32_t line = fC->Line(seqExprId);
+        uint32_t column = 0;
+        try {
+          column = fC->Column(seqExprId);
+        } catch (...) {
+          column = 0;
+        }
 
-        std::cerr << "Error REPETITION_IN_SEQUENCE: sequence '" << seqName
-                  << "' uses both goto '[->]' and non-consecutive '[=]' "
-                     "repetitions at "
-                  << fileName << ":" << line << std::endl;
+        SymbolId obj = symbols->registerSymbol(seqName);
+
+        Location loc(fileId, line, column, obj);
+        Error err(ErrorDefinition::REPETITION_IN_SEQUENCE, loc);
+
+        errors->addError(err, false);
       }
     }
   }

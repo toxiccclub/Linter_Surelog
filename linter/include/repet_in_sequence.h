@@ -6,8 +6,11 @@
 #include "Surelog/ErrorReporting/ErrorContainer.h"
 #include "Surelog/SourceCompile/SymbolTable.h"
 
+using namespace SURELOG;
+
 namespace Analyzer {
 
-void checkRepetitionInSequence(const SURELOG::FileContent* fC);
+void checkRepetitionInSequence(const FileContent* fC, ErrorContainer* errors,
+                               SymbolTable* symbols);
 
 }
