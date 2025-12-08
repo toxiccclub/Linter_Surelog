@@ -4,6 +4,7 @@
 #include "Surelog/Design/FileContent.h"
 #include "Surelog/SourceCompile/VObjectTypes.h"
 #include "class_variable_lifetime.h"
+#include "coverpoint_expression_type.h"
 #include "dpi_decl_string.h"
 #include "fatal_rule.h"
 #include "hierarchical_interface_identifier.h"
@@ -23,6 +24,7 @@ void runAllRules(const FileContent* fC, ErrorContainer* errors,
   Analyzer::checkHierarchicalInterfaceIdentifier(fC, errors, symbols);
   Analyzer::checkDpiDeclarationString(fC, errors, symbols);
   Analyzer::checkClassVariableLifetime(fC, errors, symbols);
+  Analyzer::checkCoverpointExpressionType(fC, errors, symbols);
 }
 
 void runAllRulesOnDesign(Design* design, const vpiHandle& UHDMdesign,

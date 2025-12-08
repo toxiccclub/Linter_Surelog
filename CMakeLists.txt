@@ -25,6 +25,7 @@ set(LINTER_SRC
     linter/src/prototype_return_data_type.cpp
     linter/src/repet_in_sequence.cpp
     linter/src/rule_distpatcher.cpp
+    linter/src/coverpoint_expression_type.cpp
 )
 
 foreach(f ${LINTER_SRC})
