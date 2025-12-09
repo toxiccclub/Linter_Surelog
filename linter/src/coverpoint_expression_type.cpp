@@ -73,6 +73,27 @@ VObjectType getVariableType(const FileContent* fC, NodeId exprNode) {
       }
     }
   }
+  //аргументы covergroup-функций
+  auto tfItems =
+      fC->sl_collect_all(fC->getRootNode(), VObjectType::paTf_port_item);
+  for (NodeId tfId : tfItems) {
+    NodeId nameNode = fC->Child(tfId);
+    while (nameNode && fC->Type(nameNode) != VObjectType::slStringConst)
+      nameNode = fC->Sibling(nameNode);
+
+    if (!nameNode) continue;
+
+    if (std::string(fC->SymName(nameNode)) == varName) {
+      NodeId dtNode = fC->Child(tfId);
+      if (dtNode) {
+        NodeId dataType = fC->Child(dtNode);
+        if (dataType) {
+          NodeId base = fC->Child(dataType);
+          if (base) return fC->Type(base);
+        }
+      }
+    }
+  }
 
   return VObjectType::slNoType;
 }
